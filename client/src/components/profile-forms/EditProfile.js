@@ -39,7 +39,7 @@ const EditProfile = ({ createProfile, history, profile: { profile, loading }, ge
       youtube: loading || !profile.social ? "" : profile.social.youtube,
       instagram: loading || !profile.social ? "" : profile.social.instagram,
     });
-  }, [loading]);
+  }, [loading, getCurrentProfile]);
 
   const {
     company,
@@ -194,7 +194,7 @@ const EditProfile = ({ createProfile, history, profile: { profile, loading }, ge
 
 EditProfile.propTypes = {
   createProfile: PropTypes.func.isRequired,
-  prfile: PropTypes.object.isRequired,
+  profile: PropTypes.object.isRequired,
   getCurrentProfile: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state) => ({
