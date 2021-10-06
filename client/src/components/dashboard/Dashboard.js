@@ -8,8 +8,22 @@ import DashboardActions from "./DashboardActions";
 import Experience from "./Experience";
 import Education from "./Education";
 import { deleteAccount } from "../../actions/profile";
+import { io } from "socket.io-client";
 
+let socket;
 const Dashboard = ({ getCurrentProfile, auth: { user }, profile: { profile, loading }, deleteAccount }) => {
+  useEffect(() => {
+    socket = io("localhost:5000");
+    console.log(socket);
+    socket.on("connect", () => {
+      console.log("socket.id");
+      console.log(socket.id);
+    });
+    socket.on("test", () => {
+      console.log("test");
+    });
+  }, []);
+
   useEffect(() => {
     getCurrentProfile();
   }, [getCurrentProfile]);
