@@ -1,10 +1,19 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { logout } from "../../actions/auth";
+import { io } from "socket.io-client";
 
+let socket;
 const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
+  useEffect(() => {
+    socket = io("localhost:5000");
+    socket.on("likeNotif", (data) => {
+      console.log("data");
+      console.log(data);
+    });
+  }, []);
   const authLinks = (
     <ul>
       <li>
@@ -15,14 +24,12 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
       </li>
       <li>
         <Link to='/dashboard'>
-          <i className='fas fa-user'></i>&nbsp;
-          <span className='hide-sm'>Dashboard</span>
+          <i className='fas fa-user'></i>
         </Link>
       </li>
       <li>
         <a onClick={logout} href='#!'>
-          <i className='fas fa-sign-out-alt'></i>&nbsp;
-          <span className='hide-sm'>Logout</span>
+          <i className='fas fa-sign-out-alt'></i>
         </a>
       </li>
     </ul>

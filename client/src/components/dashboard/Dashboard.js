@@ -13,20 +13,14 @@ import { io } from "socket.io-client";
 let socket;
 const Dashboard = ({ getCurrentProfile, auth: { user }, profile: { profile, loading }, deleteAccount }) => {
   useEffect(() => {
-    socket = io("localhost:5000");
-    console.log(socket);
-    socket.on("connect", () => {
-      console.log("socket.id");
-      console.log(socket.id);
-    });
-    socket.on("test", () => {
-      console.log("test");
-    });
-  }, []);
-
-  useEffect(() => {
     getCurrentProfile();
   }, [getCurrentProfile]);
+  useEffect(() => {
+    socket = io("localhost:5000");
+    socket.on("connect", () => {
+      user && socket.emit("save_user", { id: user._id, socket_id: socket.id });
+    });
+  }, [user]);
   return loading && profile === null ? (
     <Spiner />
   ) : (

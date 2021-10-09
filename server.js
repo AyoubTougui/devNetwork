@@ -23,9 +23,21 @@ app.use("/api/profile", require("./routes/api/profile"));
 app.use("/api/auth", require("./routes/api/auth"));
 app.use("/api/posts", require("./routes/api/posts"));
 
+var users = [];
+
 io.on("connection", (socket) => {
-  console.log("A user connected");
-  socket.emit("test");
+  socket.on("save_user", (data) => {
+    users[data.id] = data.socket_id;
+    console.log(users);
+  });
+  socket.on("post_like", (data) => {
+    if (data.from !== data.to) {
+      console.log(data);
+      socket.broadcast.emit("likeNotif", data);
+      console.log(users);
+      // socket.to("yoj1PT9R6Ywp6bpDAAAM").emit("likeNotif", data);
+    }
+  });
 });
 
 const PORT = process.env.PORT || 5000;
