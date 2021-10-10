@@ -5,9 +5,7 @@ const http = require("http");
 const { Server } = require("socket.io");
 const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: "*" } });
-const cors = require("cors");
-
-app.use(cors());
+const User = require("./models/User");
 
 // connect database
 connectDB();
@@ -23,19 +21,22 @@ app.use("/api/profile", require("./routes/api/profile"));
 app.use("/api/auth", require("./routes/api/auth"));
 app.use("/api/posts", require("./routes/api/posts"));
 
-var users = [];
-
 io.on("connection", (socket) => {
-  socket.on("save_user", (data) => {
-    users[data.id] = data.socket_id;
-    console.log(users);
+  socket.on("save_user", async (data) => {
+    let user = await User.findById(data.id);
+    user.Socket_id = data.socket_id;
+    await user.save();
+    console.log(user);
   });
-  socket.on("post_like", (data) => {
-    if (data.from !== data.to) {
-      console.log(data);
-      socket.broadcast.emit("likeNotif", data);
-      console.log(users);
-      // socket.to("yoj1PT9R6Ywp6bpDAAAM").emit("likeNotif", data);
+  socket.on("post_like", async (data) => {
+    let user = await User.findById(data.to);
+    for (let s of io.of("/").sockets) {
+      let socket = s[1];
+      // if (socket.id == user.Socket_id) {
+      //   socket.emit("likeNotif", data);
+      // }
+      console.log(socket.id);
+      // console.log(user.Socket_id);
     }
   });
 });
