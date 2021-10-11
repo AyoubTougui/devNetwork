@@ -4,9 +4,8 @@ import { Link } from "react-router-dom";
 import Moment from "react-moment";
 import { connect } from "react-redux";
 import { addLike, removeLike, deletePost } from "../../actions/post";
-import { io } from "socket.io-client";
+import { socket } from "../../sockets";
 
-let socket;
 const PostItem = ({
   post: { _id, text, name, avatar, user, likes, comments, date },
   auth,
@@ -16,8 +15,8 @@ const PostItem = ({
   showActions,
 }) => {
   const sendNotif = () => {
-    socket = io("localhost:5000");
-    socket.emit("post_like", { from: auth.user._id, to: user });
+    var d = new Date().toLocaleString();
+    socket.emit("post_like", { from: auth.user._id, to: user, postID: _id, time: d });
   };
 
   return (

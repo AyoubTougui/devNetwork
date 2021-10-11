@@ -8,19 +8,14 @@ import DashboardActions from "./DashboardActions";
 import Experience from "./Experience";
 import Education from "./Education";
 import { deleteAccount } from "../../actions/profile";
-import { io } from "socket.io-client";
 
-let socket;
 const Dashboard = ({ getCurrentProfile, auth: { user }, profile: { profile, loading }, deleteAccount }) => {
   useEffect(() => {
     getCurrentProfile();
   }, [getCurrentProfile]);
-  useEffect(() => {
-    socket = io("localhost:5000");
-    socket.on("connect", () => {
-      user && socket.emit("save_user", { id: user._id, socket_id: socket.id });
-    });
-  }, [user]);
+  // useEffect(() => {
+  //   user && socket.emit("save_user", { id: user._id, socket_id: socket.id });
+  // }, [user]);
   return loading && profile === null ? (
     <Spiner />
   ) : (

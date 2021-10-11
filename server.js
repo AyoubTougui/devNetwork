@@ -29,15 +29,10 @@ io.on("connection", (socket) => {
     console.log(user);
   });
   socket.on("post_like", async (data) => {
-    let user = await User.findById(data.to);
-    for (let s of io.of("/").sockets) {
-      let socket = s[1];
-      // if (socket.id == user.Socket_id) {
-      //   socket.emit("likeNotif", data);
-      // }
-      console.log(socket.id);
-      // console.log(user.Socket_id);
-    }
+    console.log(data);
+    let userFrom = await User.findById(data.from);
+    data.message = `${userFrom.name} Liked your post`;
+    socket.broadcast.emit("likeNotif", data);
   });
 });
 

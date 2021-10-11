@@ -17,9 +17,6 @@ const UserSchema = new mongoose.Schema({
   avatar: {
     type: String,
   },
-  Socket_id: {
-    type: String,
-  },
   date: {
     type: Date,
     default: Date.now,

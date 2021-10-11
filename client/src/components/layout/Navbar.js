@@ -3,17 +3,17 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { logout } from "../../actions/auth";
-import { io } from "socket.io-client";
+import { socket } from "../../sockets";
 
-let socket;
-const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
+const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
   useEffect(() => {
-    socket = io("localhost:5000");
     socket.on("likeNotif", (data) => {
-      console.log("data");
-      console.log(data);
+      if (user && user._id === data.to) {
+        console.log(data);
+        console.log(data.message);
+      }
     });
-  }, []);
+  }, [user]);
   const authLinks = (
     <ul>
       <li>
@@ -21,6 +21,11 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
       </li>
       <li>
         <Link to='/posts'>Posts</Link>
+      </li>
+      <li>
+        <Link to='/dashboard'>
+          <i className='fas fa-bell'></i>
+        </Link>
       </li>
       <li>
         <Link to='/dashboard'>
