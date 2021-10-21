@@ -8,11 +8,19 @@ import DashboardActions from "./DashboardActions";
 import Experience from "./Experience";
 import Education from "./Education";
 import { deleteAccount } from "../../actions/profile";
+import { getNotifications } from "../../actions/notification";
 
-const Dashboard = ({ getCurrentProfile, auth: { user }, profile: { profile, loading }, deleteAccount }) => {
+const Dashboard = ({
+  getCurrentProfile,
+  auth: { user },
+  profile: { profile, loading },
+  deleteAccount,
+  getNotifications,
+}) => {
   useEffect(() => {
     getCurrentProfile();
-  }, [getCurrentProfile]);
+    getNotifications();
+  }, [getCurrentProfile, getNotifications]);
   // useEffect(() => {
   //   user && socket.emit("save_user", { id: user._id, socket_id: socket.id });
   // }, [user]);
@@ -61,4 +69,4 @@ const mapStateToProps = (state) => ({
   profile: state.profile,
 });
 
-export default connect(mapStateToProps, { getCurrentProfile, deleteAccount })(Dashboard);
+export default connect(mapStateToProps, { getCurrentProfile, deleteAccount, getNotifications })(Dashboard);

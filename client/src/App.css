@@ -575,3 +575,104 @@ button {
     padding: 0.3rem 0.4rem;
   }
 }
+
+.display_notif {
+  position: relative;
+}
+
+.cont_notif {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  /* background-color: #e83b3b; */
+}
+
+.cont_notif:empty {
+  display: none;
+}
+
+.cent_notif {
+  text-align: center;
+  display: block;
+}
+
+.sec_notif {
+  height: 120px;
+  background-color: #f4f4f4;
+  transition: 0.5s;
+  padding: 0px 20px;
+  cursor: pointer;
+}
+
+.txt_notif {
+  color: black;
+  vertical-align: top;
+  font-size: 1rem;
+  padding: 5px;
+  padding-left: 10px;
+  margin: 0px;
+}
+
+.sub_notif {
+  font-size: 0.8rem;
+  color: rgb(0, 0, 0);
+  text-align: right;
+  padding: 0px;
+  margin: 0px;
+}
+
+.sec_notif:hover {
+  background-color: #bfbfbf;
+}
+
+.box_notif {
+  width: 400px;
+  height: 0px;
+  /* border-radius: 10px; */
+  transition: 0.5s;
+  position: absolute;
+  overflow-y: scroll;
+  padding: 0px;
+  right: 0px;
+  margin-top: 5px;
+
+  /* box-shadow: 10px 10px 23px 0px rgba(0, 0, 0, 0.1); */
+  /* cursor: context-menu; */
+}
+
+/* .box_notif::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #f5f5f5;
+  border-radius: 5px;
+}
+
+.box_notif::-webkit-scrollbar {
+  width: 10px;
+  background-color: #f5f5f5;
+  border-radius: 5px;
+}
+
+.box_notif::-webkit-scrollbar-thumb {
+  background-color: black;
+  border: 2px solid black;
+  border-radius: 5px;
+}
+ */
+.notBtn_notif {
+  cursor: pointer;
+}
+.showing {
+  min-height: 50px;
+  height: 50vh;
+}
+/* .box_notif:hover {
+  height: 60vh;
+}
+.notBtn_notif:hover + .box_notif {
+  height: 60vh;
+}
+
+.navbar a:hover + .navbar {
+  background: var(--dark-color);
+} */

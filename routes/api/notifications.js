@@ -75,8 +75,8 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
-// @route get api/notifications/:id
-// @desc get notifications by user
+// @route delete api/notifications/:id
+// @desc delete notifications
 // @access private
 router.delete("/:id", auth, async (req, res) => {
   try {
