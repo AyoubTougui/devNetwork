@@ -4,8 +4,15 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { logout } from "../../actions/auth";
 import { socket } from "../../sockets";
+import Moment from "react-moment";
+import { deleteNotification } from "../../actions/notification";
 
-const Navbar = ({ auth: { isAuthenticated, loading, user }, logout, notification: { notifications } }) => {
+const Navbar = ({
+  auth: { isAuthenticated, loading, user },
+  logout,
+  notification: { notifications },
+  deleteNotification,
+}) => {
   useEffect(() => {
     socket.on("likeNotif", (data) => {
       if (user && user._id === data.to) {
@@ -34,18 +41,18 @@ const Navbar = ({ auth: { isAuthenticated, loading, user }, logout, notification
         <div className='box_notif '>
           <div className='display_notif'>
             <div className='cont_notif'>
-              <div className='sec_notif'>
-                <a href='#'>
-                  <div className='txt_notif'>James liked your post: "Pure css notification box"</div>
-                  <div className='txt_notif sub_notif'>11/7 - 2:30 pm</div>
-                </a>
-              </div>
-              <div className='sec_notif'>
-                <a href='#'>
-                  <div className='txt_notif'>James liked your post: "Pure css notification box"</div>
-                  <div className='txt_notif sub_notif'>11/7 - 2:30 pm</div>
-                </a>
-              </div>
+              {notifications.length > 0 &&
+                notifications.map((notif) => (
+                  <div className='sec_notif' key={notif._id}>
+                    <i className='fas fa-times delete_x' onClick={(e) => deleteNotification(notif._id)}></i>
+                    <Link to={`/post/${notif.post}`}>
+                      <div className='txt_notif'>{notif.message}</div>
+                      <div className='txt_notif sub_notif'>
+                        <Moment format='YYYY/MM/DD,hh:mm'>{notif.date}</Moment>
+                      </div>
+                    </Link>
+                  </div>
+                ))}
             </div>
           </div>
         </div>
@@ -92,6 +99,7 @@ Navbar.propTypes = {
   logout: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   notification: PropTypes.object.isRequired,
+  deleteNotification: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -99,4 +107,4 @@ const mapStateToProps = (state) => ({
   notification: state.notification,
 });
 
-export default connect(mapStateToProps, { logout })(Navbar);
+export default connect(mapStateToProps, { logout, deleteNotification })(Navbar);

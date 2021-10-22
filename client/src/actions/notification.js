@@ -16,3 +16,20 @@ export const getNotifications = () => async (dispatch) => {
     });
   }
 };
+
+// delete notifications
+
+export const deleteNotification = (id) => async (dispatch) => {
+  try {
+    await axios.delete(`api/notifications/${id}`);
+    dispatch({
+      type: DELETE_NOTIFICATION,
+      payload: id,
+    });
+  } catch (err) {
+    dispatch({
+      type: NOTIFICATION_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
+};

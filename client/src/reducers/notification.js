@@ -16,6 +16,12 @@ export default function (state = initialState, action) {
         notifications: payload,
         loading: false,
       };
+    case DELETE_NOTIFICATION:
+      return {
+        ...state,
+        notifications: state.notifications.filter((notif) => notif._id !== payload),
+        loading: false,
+      };
     case NOTIFICATION_ERROR:
       return {
         ...state,

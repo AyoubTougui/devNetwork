@@ -598,6 +598,7 @@ button {
 }
 
 .sec_notif {
+  position: relative;
   height: 120px;
   background-color: #f4f4f4;
   transition: 0.5s;
@@ -676,3 +677,11 @@ button {
 .navbar a:hover + .navbar {
   background: var(--dark-color);
 } */
+
+.delete_x {
+  color: black;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  z-index: 1;
+}
