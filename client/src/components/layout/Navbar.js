@@ -5,14 +5,19 @@ import PropTypes from "prop-types";
 import { logout } from "../../actions/auth";
 import { socket } from "../../sockets";
 import Moment from "react-moment";
-import { deleteNotification } from "../../actions/notification";
+import { deleteNotification, getNotifications } from "../../actions/notification";
 
 const Navbar = ({
   auth: { isAuthenticated, loading, user },
   logout,
   notification: { notifications },
   deleteNotification,
+  getNotifications,
+  match,
 }) => {
+  // useEffect(() => {
+  //   isAuthenticated && getNotifications();
+  // }, [getNotifications, isAuthenticated]);
   useEffect(() => {
     socket.on("likeNotif", (data) => {
       if (user && user._id === data.to) {
@@ -44,7 +49,11 @@ const Navbar = ({
               {notifications.length > 0 &&
                 notifications.map((notif) => (
                   <div className='sec_notif' key={notif._id}>
-                    <i className='fas fa-times delete_x' onClick={(e) => deleteNotification(notif._id)}></i>
+                    <i
+                      title='Delete Notification'
+                      className='fas fa-times delete_x'
+                      onClick={(e) => deleteNotification(notif._id)}
+                    ></i>
                     <Link to={`/post/${notif.post}`}>
                       <div className='txt_notif'>{notif.message}</div>
                       <div className='txt_notif sub_notif'>
@@ -100,6 +109,7 @@ Navbar.propTypes = {
   auth: PropTypes.object.isRequired,
   notification: PropTypes.object.isRequired,
   deleteNotification: PropTypes.func.isRequired,
+  getNotifications: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -107,4 +117,4 @@ const mapStateToProps = (state) => ({
   notification: state.notification,
 });
 
-export default connect(mapStateToProps, { logout, deleteNotification })(Navbar);
+export default connect(mapStateToProps, { logout, deleteNotification, getNotifications })(Navbar);
