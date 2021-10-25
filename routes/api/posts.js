@@ -2,9 +2,9 @@ const express = require("express");
 const router = express.Router();
 const { check, validationResult } = require("express-validator");
 const auth = require("../../middleware/auth");
-const Profile = require("../../models/Profile");
 const User = require("../../models/User");
 const Post = require("../../models/Post");
+const Notification = require("../../models/Notification");
 
 // @route POST api/posts
 // @desc create post
@@ -102,10 +102,20 @@ router.put("/like/:id", auth, async (req, res) => {
 
     // check if post has already been liked
     if (post.likes.filter((like) => like.user.toString() == req.user.id).length > 0) {
-      return res.status(400).json({ msg: "post already liked" });
+      return res.status(400).json({ msg: "Post already liked" });
     }
     post.likes.unshift({ user: req.user.id });
     await post.save();
+    console.log(req.user);
+    const user = await User.findById(req.user.id).select("-password");
+    const newNotification = new Notification({
+      user_from: req.user.id,
+      user_to: post.user,
+      post: post._id,
+      message: `${user.name} liked your post`,
+    });
+
+    await newNotification.save();
 
     res.json(post.likes);
   } catch (err) {
@@ -137,7 +147,7 @@ router.put("/unlike/:id", auth, async (req, res) => {
 });
 
 // @route POST api/posts/comment/:id
-// @desc create post
+// @desc create comment
 // @access private
 router.post("/comment/:id", [auth, [check("text", "text is required").not().isEmpty()]], async (req, res) => {
   const errors = validationResult(req);
@@ -147,7 +157,6 @@ router.post("/comment/:id", [auth, [check("text", "text is required").not().isEm
 
   try {
     const user = await User.findById(req.user.id).select("-password");
-
     const post = await Post.findById(req.params.id);
     const newComment = {
       text: req.body.text,
@@ -157,6 +166,15 @@ router.post("/comment/:id", [auth, [check("text", "text is required").not().isEm
     };
     post.comments.unshift(newComment);
     await post.save();
+
+    const newNotification = new Notification({
+      user_from: req.user.id,
+      user_to: post.user,
+      post: post._id,
+      message: `${user.name} commented on your post`,
+    });
+
+    await newNotification.save();
     res.json(post.comments);
   } catch (err) {
     console.error(err.message);
@@ -165,7 +183,7 @@ router.post("/comment/:id", [auth, [check("text", "text is required").not().isEm
 });
 
 // @route PUT api/posts/comment/:id/:comment_id
-// @desc unlike a post
+// @desc delete comment
 // @access private
 router.delete("/comment/:id/:comment_id", auth, async (req, res) => {
   try {
