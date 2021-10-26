@@ -22,20 +22,14 @@ app.use("/api/auth", require("./routes/api/auth"));
 app.use("/api/posts", require("./routes/api/posts"));
 app.use("/api/notifications", require("./routes/api/notifications"));
 
-// io.on("connection", (socket) => {
-//   socket.on("save_user", async (data) => {
-//     let user = await User.findById(data.id);
-//     user.Socket_id = data.socket_id;
-//     await user.save();
-//     console.log(user);
-//   });
-//   socket.on("post_like", async (data) => {
-//     console.log(data);
-//     let userFrom = await User.findById(data.from);
-//     data.message = `${userFrom.name} Liked your post`;
-//     socket.broadcast.emit("likeNotif", data);
-//   });
-// });
+io.on("connection", (socket) => {
+  socket.on("post_like", async (data) => {
+    socket.broadcast.emit("likeNotif", data);
+  });
+  socket.on("post_comment", async (data) => {
+    socket.broadcast.emit("commentNotif", data);
+  });
+});
 
 const PORT = process.env.PORT || 5000;
 

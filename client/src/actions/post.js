@@ -11,6 +11,8 @@ import {
   REMOVE_COMMENT,
 } from "./types";
 
+import { socket } from "../sockets";
+
 // get posts
 export const getPosts = () => async (dispatch) => {
   try {
@@ -28,7 +30,7 @@ export const getPosts = () => async (dispatch) => {
 };
 
 // add like
-export const addLike = (postID) => async (dispatch) => {
+export const addLike = (postID, from, to) => async (dispatch) => {
   try {
     const res = await axios.put(`/api/posts/like/${postID}`);
 
@@ -36,6 +38,8 @@ export const addLike = (postID) => async (dispatch) => {
       type: UPDATE_LIKES,
       payload: { id: postID, likes: res.data },
     });
+    // sockets
+    socket.emit("post_like", { from, to, postID });
   } catch (err) {
     dispatch({
       type: POST_ERROR,
@@ -119,7 +123,7 @@ export const getPost = (postID) => async (dispatch) => {
 };
 
 // add comment
-export const addComment = (postID, formData) => async (dispatch) => {
+export const addComment = (postID, formData, from, to) => async (dispatch) => {
   try {
     const config = {
       headers: {
@@ -132,6 +136,8 @@ export const addComment = (postID, formData) => async (dispatch) => {
       payload: res.data,
     });
     dispatch(setAlert("Comment Added"));
+    // socket
+    socket.emit("post_comment", { from, to, postID });
   } catch (err) {
     dispatch({
       type: POST_ERROR,

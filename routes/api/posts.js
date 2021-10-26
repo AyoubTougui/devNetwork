@@ -106,16 +106,17 @@ router.put("/like/:id", auth, async (req, res) => {
     }
     post.likes.unshift({ user: req.user.id });
     await post.save();
-    console.log(req.user);
-    const user = await User.findById(req.user.id).select("-password");
-    const newNotification = new Notification({
-      user_from: req.user.id,
-      user_to: post.user,
-      post: post._id,
-      message: `${user.name} liked your post`,
-    });
+    if (req.user.id !== post.user.toString()) {
+      const user = await User.findById(req.user.id).select("-password");
+      const newNotification = new Notification({
+        user_from: req.user.id,
+        user_to: post.user,
+        post: post._id,
+        message: `${user.name} liked your post`,
+      });
 
-    await newNotification.save();
+      await newNotification.save();
+    }
 
     res.json(post.likes);
   } catch (err) {
@@ -166,15 +167,16 @@ router.post("/comment/:id", [auth, [check("text", "text is required").not().isEm
     };
     post.comments.unshift(newComment);
     await post.save();
+    if (req.user.id !== post.user.toString()) {
+      const newNotification = new Notification({
+        user_from: req.user.id,
+        user_to: post.user,
+        post: post._id,
+        message: `${user.name} commented on your post`,
+      });
+      await newNotification.save();
+    }
 
-    const newNotification = new Notification({
-      user_from: req.user.id,
-      user_to: post.user,
-      post: post._id,
-      message: `${user.name} commented on your post`,
-    });
-
-    await newNotification.save();
     res.json(post.comments);
   } catch (err) {
     console.error(err.message);

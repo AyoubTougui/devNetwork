@@ -1,4 +1,4 @@
-import { GET_NOTIFICATIONS, DELETE_NOTIFICATION, NEW_NOTIFICATION, NOTIFICATION_ERROR } from "../actions/types";
+import { GET_NOTIFICATIONS, DELETE_NOTIFICATION, NOTIFICATION_ERROR } from "../actions/types";
 
 const initialState = {
   New_notification: null,

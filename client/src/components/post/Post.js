@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import CommentForm from "./CommentForm";
 import CommentItem from "./CommentItem";
 
-const Post = ({ getPost, post: { post, loading }, match }) => {
+const Post = ({ getPost, post: { post, loading }, match, auth }) => {
   useEffect(() => {
     getPost(match.params.id);
   }, [getPost, match.params.id]);
@@ -20,7 +20,7 @@ const Post = ({ getPost, post: { post, loading }, match }) => {
         Back to posts
       </Link>
       <PostItem post={post} showActions={false} />
-      <CommentForm postID={post._id} />
+      <CommentForm postID={post._id} to={post.user} from={auth.user._id} />
       <div className='comments'>
         {post.comments.map((comment) => (
           <CommentItem key={comment._id} comment={comment} postID={post._id} />
@@ -37,6 +37,7 @@ Post.propTypes = {
 
 const mapStateToProps = (state) => ({
   post: state.post,
+  auth: state.auth,
 });
 
 export default connect(mapStateToProps, { getPost })(Post);

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import Moment from "react-moment";
 import { connect } from "react-redux";
 import { addLike, removeLike, deletePost } from "../../actions/post";
-import { socket } from "../../sockets";
+// import { socket } from "../../sockets";
 
 const PostItem = ({
   post: { _id, text, name, avatar, user, likes, comments, date },
@@ -14,10 +14,10 @@ const PostItem = ({
   deletePost,
   showActions,
 }) => {
-  const sendNotif = () => {
-    var d = new Date().toLocaleString();
-    socket.emit("post_like", { from: auth.user._id, to: user, postID: _id, time: d });
-  };
+  // const sendNotif = () => {
+  //   var d = new Date().toLocaleString();
+  //   socket.emit("post_like", { from: auth.user._id, to: user, postID: _id, time: d });
+  // };
 
   return (
     <div className='post bg-white p-1 my-1'>
@@ -38,8 +38,7 @@ const PostItem = ({
               type='button'
               className='btn btn-light'
               onClick={(e) => {
-                addLike(_id);
-                sendNotif();
+                addLike(_id, auth.user._id, user);
               }}
             >
               <i className='fas fa-thumbs-up'></i>&nbsp;

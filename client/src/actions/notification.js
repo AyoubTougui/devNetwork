@@ -1,5 +1,5 @@
 import axios from "axios";
-import { GET_NOTIFICATIONS, DELETE_NOTIFICATION, NEW_NOTIFICATION, NOTIFICATION_ERROR } from "./types";
+import { GET_NOTIFICATIONS, DELETE_NOTIFICATION, NOTIFICATION_ERROR } from "./types";
 
 // get notifications of current user
 export const getNotifications = () => async (dispatch) => {

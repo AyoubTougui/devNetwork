@@ -15,17 +15,23 @@ const Navbar = ({
   getNotifications,
   match,
 }) => {
-  // useEffect(() => {
-  //   isAuthenticated && getNotifications();
-  // }, [getNotifications, isAuthenticated]);
+  useEffect(() => {
+    if (isAuthenticated) {
+      getNotifications();
+    }
+  }, [loading]);
   useEffect(() => {
     socket.on("likeNotif", (data) => {
       if (user && user._id === data.to) {
-        console.log(data);
-        console.log(data.message);
+        getNotifications();
       }
     });
-  }, [user]);
+    socket.on("commentNotif", (data) => {
+      if (user && user._id === data.to) {
+        getNotifications();
+      }
+    });
+  }, [user, getNotifications]);
 
   const Show = () => {
     document.querySelector(".box_notif").classList.toggle("showing");
